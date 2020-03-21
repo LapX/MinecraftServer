@@ -3,3 +3,12 @@ backup
 Chamantopia
 logs
 .idea
+banned-ips.json
+banned-players.json
+eula.txt
+nogui.cmd
+ops.json
+server.jar
+server.properties
+usercache.json
+whitelist.json
