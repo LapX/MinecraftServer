@@ -6,7 +6,6 @@ logs
 banned-ips.json
 banned-players.json
 eula.txt
-nogui.cmd
 ops.json
 server.jar
 server.properties
