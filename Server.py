@@ -24,14 +24,17 @@ class Server:
     def _initCommandLine(self):
         while True:
             command = raw_input("$ ")
-            self._command(command)
+            if command == "backup":
+                self._backup()
+            else:
+                self._command(command)
 
     def _start(self):
         logging.info('Starting server')
         self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE)
         logging.info("Server started.")
 
-    def _stop(self):
+    def _stop_backup(self):
         logging.info('Stopping server')
         self._command(
             "say Server will close in 1 minute for backup, it will be back online in 1 minute.")
@@ -47,7 +50,7 @@ class Server:
         logging.info('Server stopped')
 
     def _backup(self):
-        server._stop()
+        server._stop_backup()
         sleep(10)
         os.system("7z a -tzip backup/" +
                   str(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')) + ".zip Chamantopia")
