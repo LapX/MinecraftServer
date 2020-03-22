@@ -23,7 +23,7 @@ class Server:
 
     def _initCommandLine(self):
         while True:
-            command = raw_input("$ ")
+            command = input("$ ")
             if command == "backup":
                 self._backup()
             else:
