@@ -69,7 +69,7 @@ class Server:
     def _backup(self):
         self._stop_backup()
         sleep(10)
-        os.system("7z a -tzip backup/" +
+        os.system("7z a -tzip E:/BackupMinecraft/" +
                   str(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')) + ".zip Chamantopia")
         sleep(5)
         self._start()
