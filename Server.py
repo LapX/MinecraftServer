@@ -26,6 +26,8 @@ class Server:
             command = input("$ ")
             if command == "backup":
                 self._backup()
+            elif command == "restart":
+                self._restart()
             else:
                 self._command(command)
 
@@ -65,23 +67,27 @@ class Server:
         logging.info('Server stopped')
 
     def _backup(self):
-        server._stop_backup()
+        self._stop_backup()
         sleep(10)
         os.system("7z a -tzip backup/" +
                   str(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')) + ".zip Chamantopia")
         sleep(5)
-        server._start()
+        self._start()
+
+    def _restart(self):
+        self._stop()
+        sleep(5)
+        self._start()
 
     def _threaded_sleep(self):
         while True:
             now = datetime.now()
-            # to = now + timedelta(seconds=1)
             to = now + timedelta(days=1)
             to = to.strftime("%Y-%m-%d") + "-7-0-0"
             to = datetime.strptime(to, '%Y-%m-%d-%H-%M-%S')
             print("I will now sleep until " + str(to))
             sleep((to - now).seconds)
-            server._backup()
+            self._backup()
 
 
 server = Server()
