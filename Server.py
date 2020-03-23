@@ -49,6 +49,21 @@ class Server:
         self._command("stop")
         logging.info('Server stopped')
 
+    def _stop(self):
+        logging.info('Stopping server')
+        self._command(
+            "say Server will close in 1 minute, it will be back online in 30 seconds.")
+        sleep(30)
+        self._command(
+            "say Server will close in 30 seconds, it will be back online in 30 seconds.")
+        sleep(20)
+        for i in range(10, 0, -1):
+            self._command(
+                "say Server will close in " + str(i) + " seconds, it will be back online in 30 seconds.")
+            sleep(1)
+        self._command("stop")
+        logging.info('Server stopped')
+
     def _backup(self):
         server._stop_backup()
         sleep(10)
