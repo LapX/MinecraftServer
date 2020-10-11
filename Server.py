@@ -12,8 +12,13 @@ class Server:
 
     def initial_start(self):
         self._start()
-        thread = Thread(target=self._threaded_sleep)
-        thread.start()
+
+        sleep_thread = Thread(target=self._threaded_sleep)
+        sleep_thread.start()
+
+        player_command_thread = Thread(target=self._threaded_player_command)
+        player_command_thread.start()
+
         self._initCommandLine()
 
     def _command(self, cmd):
@@ -33,7 +38,7 @@ class Server:
 
     def _start(self):
         logging.info('Starting server')
-        self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE)
+        self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         logging.info("Server started.")
 
     def _stop_backup(self):
@@ -70,7 +75,7 @@ class Server:
         self._stop_backup()
         sleep(10)
         os.system("7z a -tzip E:/BackupMinecraft/" +
-                  str(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')) + ".zip Chamantopia")
+                  str(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')) + ".zip ChamanWorld")
         sleep(5)
         self._start()
 
@@ -88,6 +93,24 @@ class Server:
             print("I will now sleep until " + str(to))
             sleep((to - now).seconds)
             self._backup()
+
+    def _threaded_player_command(self):
+        for line in iter(self._process.stdout.readline, ""):
+            message = line.rstrip()
+
+            if "!day" in message:
+                self._command("time set day")
+            elif "!midnight" in message:
+                self._command("time set midnight")
+            elif "!night" in message:
+                self._command("time set night")
+            elif "!noon" in message:
+                self._command("time set noon")
+            elif "!help" in message:
+                self._command(
+                    "say Put a ! followed by your command to set the time. Either day, midnight, night or noon")
+
+            print(message)
 
 
 server = Server()
