@@ -96,7 +96,7 @@ class Server:
 
     def _threaded_player_command(self):
         for line in iter(self._process.stdout.readline, ""):
-            message = line.rstrip()
+            message = str(line).replace("b'", '')
 
             if "!day" in message:
                 self._command("time set day")
