@@ -5,10 +5,13 @@ from datetime import datetime, timedelta
 from threading import Thread
 from time import sleep
 
+from Rewards import Rewards
+
 
 class Server:
     def __init__(self):
         self._executable = "nogui.cmd"
+        self._rewards = Rewards()
 
     def initial_start(self):
         self._start()
@@ -98,18 +101,20 @@ class Server:
 
     def _threaded_player_command(self):
         for line in iter(self._process.stdout.readline, ""):
-
-            if "!day" in line:
-                self._command("time set day")
-            elif "!midnight" in line:
-                self._command("time set midnight")
-            elif "!night" in line:
-                self._command("time set night")
-            elif "!noon" in line:
-                self._command("time set noon")
-            elif "!help" in line:
-                self._command(
-                    "say Put a ! followed by your command to set the time. Either day, midnight, night or noon")
+            if "!" in line:
+                if "!help" in line:
+                    self._command(
+                        "say Put a ! followed by your command to set the time. Either day, midnight, night or noon.")
+                elif "!day" in line:
+                    self._command("time set day")
+                elif "!midnight" in line:
+                    self._command("time set midnight")
+                elif "!night" in line:
+                    self._command("time set night")
+                elif "!noon" in line:
+                    self._command("time set noon")
+                elif "!roll" in line:
+                    self._command("say You have won : " + self._rewards.roll())
 
             print(line)
 
