@@ -16,9 +16,6 @@ class Server:
         sleep_thread = Thread(target=self._threaded_sleep)
         sleep_thread.start()
 
-        player_command_thread = Thread(target=self._threaded_player_command)
-        player_command_thread.start()
-
         self._initCommandLine()
 
     def _command(self, cmd):
@@ -40,6 +37,10 @@ class Server:
         logging.info('Starting server')
         self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                          universal_newlines=True)
+
+        self.player_command_thread = Thread(target=self._threaded_player_command)
+        self.player_command_thread.start()
+
         logging.info("Server started.")
 
     def _stop_backup(self):
