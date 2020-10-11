@@ -38,7 +38,8 @@ class Server:
 
     def _start(self):
         logging.info('Starting server')
-        self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self._process = subprocess.Popen(self._executable, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                         universal_newlines=True)
         logging.info("Server started.")
 
     def _stop_backup(self):
@@ -96,21 +97,20 @@ class Server:
 
     def _threaded_player_command(self):
         for line in iter(self._process.stdout.readline, ""):
-            message = str(line).replace("b'", '')
 
-            if "!day" in message:
+            if "!day" in line:
                 self._command("time set day")
-            elif "!midnight" in message:
+            elif "!midnight" in line:
                 self._command("time set midnight")
-            elif "!night" in message:
+            elif "!night" in line:
                 self._command("time set night")
-            elif "!noon" in message:
+            elif "!noon" in line:
                 self._command("time set noon")
-            elif "!help" in message:
+            elif "!help" in line:
                 self._command(
                     "say Put a ! followed by your command to set the time. Either day, midnight, night or noon")
 
-            print(message)
+            print(line)
 
 
 server = Server()
