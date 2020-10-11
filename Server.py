@@ -23,7 +23,7 @@ class Server:
 
     def _command(self, cmd):
         logging.info('Writing server command')
-        self._process.stdin.write(str.encode('%s\n' % cmd))
+        self._process.stdin.write(cmd)
         self._process.stdin.flush()
 
     def _initCommandLine(self):
